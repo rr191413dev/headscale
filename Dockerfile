@@ -1,18 +1,18 @@
-FROM headscale/headscale:v0.28.0 AS base
+FROM ghcr.io/juanfont/headscale:v0.28.0 AS base
 
-# 使用 Alpine 作為最終鏡像，加入必要工具
 FROM alpine:3.20
 
-# 複製 Headscale 二進位和預設檔案
-COPY --from=base /usr/bin/headscale /usr/bin/headscale
-COPY --from=base /etc/headscale /etc/headscale
+# 複製 Headscale 主程式（正確路徑）
+COPY --from=base /ko-app/headscale /usr/bin/headscale
 
-# 安裝基礎工具（解決 Terminal + cat/ls 等問題）
-RUN apk add --no-cache bash curl ca-certificates su-exec
+# 複製預設配置目錄（如果存在）
+COPY --from=base /etc/headscale /etc/headscale || true
 
-# 建立必要目錄權限
-RUN mkdir -p /etc/headscale /var/lib/headscale && \
-    chmod -R 755 /etc/headscale
+# 安裝 shell 工具 + 建立必要目錄（解決 Terminal）
+RUN apk add --no-cache bash curl ca-certificates su-exec && \
+    mkdir -p /etc/headscale /var/lib/headscale /var/run/headscale && \
+    chmod -R 755 /etc/headscale /var/lib/headscale /var/run/headscale && \
+    chmod +x /usr/bin/headscale
 
 EXPOSE 8080 9090 50443
 CMD ["headscale", "serve"]
