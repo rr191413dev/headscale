@@ -16,4 +16,4 @@ RUN mkdir -p /etc/headscale /var/lib/headscale /var/run/headscale && \
 
 EXPOSE 8080 9090 50443
 
-CMD ["headscale", "serve"]
+CMD ["headscale", "serve", "-c", "/etc/headscale/config.yaml"]
