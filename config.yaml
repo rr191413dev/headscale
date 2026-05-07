@@ -1,0 +1,16 @@
+server_url: https://rrjp.zeabur.com
+listen_addr: 0.0.0.0:8080
+
+# 数据库建议先用 SQLite 测试（最简单）
+db_type: sqlite3
+db_path: /var/lib/headscale/db.sqlite
+
+# 必要路径
+private_key_path: /var/lib/headscale/private.key
+noise:
+  private_key_path: /var/lib/headscale/noise_private.key
+
+# ACL（可后续再加）
+policy:
+  mode: file
+  path: /etc/headscale/policy.hcl
