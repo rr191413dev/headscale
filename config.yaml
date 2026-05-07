@@ -1,22 +1,29 @@
-server_url: https://rrjp.zeabur.app
+server_url: https://rrjp.zeabur.app   # 务必改成 Zeabur 绑定的域名
 listen_addr: 0.0.0.0:8080
 
-# 数据库（先用 SQLite 测试）
+# 数据库（SQLite 最简单）
 db_type: sqlite3
 db_path: /var/lib/headscale/db.sqlite
 
+# 密钥路径
 private_key_path: /var/lib/headscale/private.key
 noise:
   private_key_path: /var/lib/headscale/noise_private.key
 
+# ==================== 必须的前缀配置 ====================
+prefixes:
+  v4: 100.64.0.0/10     # 推荐的 IPv4 CGNAT 网段
+  # v6: fd7a:115:ca1e::/48   # 如需 IPv6 可取消注释
+
 # ==================== DNS 配置 ====================
 dns:
-  override_local_dns: true   # 如果不需要覆盖本地DNS，可改为 false
+  override_local_dns: true
   nameservers:
     global:
       - 1.1.1.1
       - 8.8.8.8
-      - 8.8.4.4
-  # 可选：其他 DNS 设置
-  # base_domain: yourdomain.com
-  # magic_dns: true
+
+# ACL 策略（基础设置）
+policy:
+  mode: file
+  path: /etc/headscale/policy.hcl
